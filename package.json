@@ -1,0 +1,9 @@
+{
+  "name": "gourav-mewara-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal editorial portfolio for Gourav Mewara — Video Editor & Creative Storyteller",
+  "scripts": {
+    "dev": "powershell -ExecutionPolicy Bypass -File ./server.ps1"
+  }
+}

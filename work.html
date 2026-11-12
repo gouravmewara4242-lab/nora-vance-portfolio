@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selected Work &mdash; Gourav Mewara</title>
+  <meta name="description" content="Portfolio of selected 9:16 reels, brand films, and motion projects by Gourav Mewara." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..500&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+    <!-- 1. Centralized Environment Configuration -->
+  <script src="js/env.js"></script>
+
+  <!-- 2. Firebase SDK Modules (cinestroke-design) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- 3. Supabase SDK Module (cigphrvgzalovxyvyvah) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="js/data.js"></script>
+  <script defer src="js/admin.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body data-page="work">
+  <div id="site-header-mount"></div>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="page-hero__box surface-video-editing">
+          <span class="eyebrow">Portfolio Hub &middot; Fixed 9:16 &amp; Films</span>
+          <h1 class="display-lg">Selected Work</h1>
+          <p>Browse all 12 curated projects across 9:16 reels, film, motion, design, scriptwriting, and freelance brand retainers. <strong>Click any reel card to play or test with your own video upload / video link.</strong></p>
+          <div class="category-nav-strip">
+            <a href="video-editing.html" class="category-nav-pill">Video Editing Room &rarr;</a>
+            <a href="motion-graphics.html" class="category-nav-pill">Motion Graphics &rarr;</a>
+            <a href="graphic-design.html" class="category-nav-pill">Graphic Design &rarr;</a>
+            <a href="script-writing.html" class="category-nav-pill">Script Writing &rarr;</a>
+            <a href="storytelling.html" class="category-nav-pill">Storytelling &rarr;</a>
+            <a href="freelance-projects.html" class="category-nav-pill">Freelance Projects &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--compact" style="padding-top: 8px;">
+      <div class="container">
+        <div class="filter-pills" id="workFilterPills"></div>
+        <div class="featured-reel-grid" id="workProjectsGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer-mount"></div>
+</body>
+</html>
+

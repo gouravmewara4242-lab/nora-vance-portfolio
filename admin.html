@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio Admin Panel — Gourav Mewara</title>
+  <meta name="description" content="Dedicated Studio Admin Panel for Gourav Mewara: Google Firebase Auth, Cloudinary video hosting (strictly under 100MB), and Supabase content database." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..500&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- 1. Centralized Environment Configuration -->
+  <script src="js/env.js"></script>
+
+  <!-- 2. Firebase SDK Modules (cinestroke-design) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- 3. Supabase SDK Module (cigphrvgzalovxyvyvah) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- 4. Portfolio Data & Core Systems -->
+  <script defer src="js/data.js"></script>
+  <script defer src="js/admin.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body data-page="admin">
+  <div id="site-header-mount"></div>
+
+  <main class="section section--compact">
+    <div class="container" style="max-width: 1120px;">
+
+      <!-- ======================================================================
+           AUTH GATE: Google Sign-In for gourav.mewara4242@gmail.com
+           ====================================================================== -->
+      <div id="adminAuthGate" style="display:none; max-width:500px; margin:40px auto; padding:38px; border-radius:var(--radius-lg); background:var(--surface); border:1px solid var(--border-soft); box-shadow:var(--shadow-card);">
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:999px; background:var(--pastel-lavender-soft); margin-bottom:16px;">
+          <span class="availability-dot" style="background:var(--accent);"></span>
+          <span style="font-size:0.82rem; font-weight:700; color:var(--accent);">Single Admin Authentication</span>
+        </div>
+
+        <h1 class="serif" style="font-size:2rem; margin-bottom:8px; line-height:1.2;">Sign in to Studio Admin</h1>
+        <p class="muted" style="margin-bottom:24px; font-size:0.95rem; line-height:1.6;">
+          This dashboard is private and strictly restricted to <strong>gourav.mewara4242@gmail.com</strong>.
+        </p>
+
+        <!-- Google Sign-In Button -->
+        <button type="button" class="btn btn--ghost" id="pageGoogleLoginBtn" style="width:100%; display:flex; align-items:center; justify-content:center; gap:12px; padding:14px 20px; border-radius:var(--radius-pill); border:1.5px solid var(--border-strong); background:#FFFFFF; font-weight:600; font-size:1rem; margin-bottom:20px; box-shadow:var(--shadow-xs); cursor:pointer;">
+          <svg width="22" height="22" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Sign in with Google</span>
+        </button>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+          <div style="flex:1; height:1px; background:var(--border-soft);"></div>
+          <span class="muted" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; font-weight:600;">Or enter password</span>
+          <div style="flex:1; height:1px; background:var(--border-soft);"></div>
+        </div>
+
+        <form id="pageLoginForm">
+          <div class="field">
+            <label for="pageEmailInput">Authorized Email Address</label>
+            <input type="email" id="pageEmailInput" value="gourav.mewara4242@gmail.com" readonly style="background:var(--surface-muted); font-weight:600;" required />
+            <small class="muted" style="font-size:0.75rem;">Only gourav.mewara4242@gmail.com is permitted.</small>
+          </div>
+
+          <div class="field">
+            <label for="pagePasswordInput">Admin Password / Passkey</label>
+            <input type="password" id="pagePasswordInput" placeholder="Enter admin password" required autofocus />
+          </div>
+
+          <div id="pageLoginError" style="display:none; padding:12px 16px; border-radius:12px; background:#FDE8E8; color:#C81E1E; font-size:0.88rem; margin-bottom:16px;"></div>
+
+          <button type="submit" class="btn btn--primary btn--lg" style="width:100%;">Sign In as Gourav Mewara &rarr;</button>
+        </form>
+
+        <div style="margin-top:22px; padding-top:16px; border-top:1px solid var(--border-soft); display:flex; align-items:center; justify-content:space-between; font-size:0.82rem;" class="muted">
+          <span>Global Shortcut: <strong>Shift + Ctrl + A</strong></span>
+          <a href="index.html" style="color:var(--accent);">Back to Site &rarr;</a>
+        </div>
+      </div>
+
+      <!-- ======================================================================
+           AUTHENTICATED STUDIO ADMIN DASHBOARD
+           ====================================================================== -->
+      <div id="adminDashboardView" style="display:none;">
+
+        <!-- Top Header & Cloud Status Strip -->
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:28px; padding:22px 28px; border-radius:var(--radius-card); background:var(--surface); border:1px solid var(--border-soft); box-shadow:var(--shadow-card);">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <img src="assests/IMG_0433.jpg" onerror="this.src='assets/images/IMG_0433.jpg'" alt="Gourav Mewara" style="width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--accent);" />
+            <div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <h1 class="serif" style="font-size:1.65rem; margin:0;">Gourav Mewara · Studio Admin</h1>
+                <span class="tag tag--storytelling" id="adminAuthBadge">Authorized</span>
+              </div>
+              <div class="muted" style="font-size:0.86rem; margin-top:4px;">
+                Logged in: <strong id="adminUserEmailLabel">gourav.mewara4242@gmail.com</strong> · Cloudinary: <strong>dxhew9qpk</strong> (&le;100MB) · Supabase: <strong>cigphrvgzalovxyvyvah</strong>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px;">
+            <a href="index.html" class="btn btn--ghost btn--sm">View Live Site &rarr;</a>
+            <button class="btn btn--secondary btn--sm" id="pageLogoutBtn">Logout</button>
+          </div>
+        </div>
+
+        <!-- Admin Tab Navigation -->
+        <div class="filter-pills" style="margin-bottom:24px;">
+          <button class="filter-pill is-active" id="tabUploadBtn" data-tab="upload">Upload 9:16 Reel / Video</button>
+          <button class="filter-pill" id="tabHeroBtn" data-tab="hero">Hero Section Upload</button>
+          <button class="filter-pill" id="tabShowreelBtn" data-tab="showreel">Director's Showreel (Cloudinary)</button>
+          <button class="filter-pill" id="tabGraphicBtn" data-tab="graphic">Upload Graphic Design &amp; Case Study</button>
+          <button class="filter-pill" id="tabManageBtn" data-tab="manage">Manage Live Inventory</button>
+          <button class="filter-pill" id="tabCloudBtn" data-tab="cloud">Supabase &amp; Cloud Config (.env)</button>
+        </div>
+
+        <!-- ==================================================================
+             TAB 1: UPLOAD 9:16 REEL / VIDEO (Cloudinary + Supabase)
+             ================================================================== -->
+        <div id="tabUploadContent" class="form-card" style="padding:var(--space-6);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px;">
+            <div>
+              <span class="eyebrow">Direct Video Engine · 9:16 Fixed Ratio</span>
+              <h2 class="display-md">Publish New 9:16 Reel to Portfolio</h2>
+              <p class="muted" style="margin:4px 0 0; font-size:0.95rem;">
+                Videos are hosted on Cloudinary (<strong>dxhew9qpk</strong>), recorded in Supabase, and synced live to your 9:16 Featured Reels section.
+              </p>
+            </div>
+            <div style="padding:8px 16px; border-radius:var(--radius-pill); background:var(--pastel-lavender-soft); border:1px solid rgba(91,75,196,0.25); font-weight:700; font-size:0.88rem; color:var(--accent);">
+              Strict Limit: Video &le; 100 MB
+            </div>
+          </div>
+
+          <form id="fullUploadForm">
+            <div class="form-row-2">
+              <div class="field">
+                <label for="fullTitle">Reel / Video Title *</label>
+                <input type="text" id="fullTitle" placeholder="e.g. Aranya Botanicals — Morning Glow Launch Reel" required />
+              </div>
+              <div class="field">
+                <label for="fullCategory">Discipline Category *</label>
+                <select id="fullCategory" required>
+                  <option value="video-editing" selected>Video Editing (9:16 Vertical Reel / Commercial)</option>
+                  <option value="motion-graphics">Motion Graphics (Kinetic Typography / 3D)</option>
+                  <option value="graphic-design">Graphic Design (Posters / YouTube Thumbnails)</option>
+                  <option value="script-writing">Script Writing (Treatments / Narrative Voiceover)</option>
+                  <option value="storytelling">Storytelling (Documentary / Case Study)</option>
+                  <option value="freelance">Commercial Brand Collaboration</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Video File Dropzone (Strictly <= 100MB) -->
+            <div class="field">
+              <label>Video File (Under 100 MB · Cloudinary dxhew9qpk)</label>
+              <div class="upload-dropzone" id="fullVideoDropzone">
+                <input type="file" id="fullVideoFile" accept="video/mp4,video/webm,video/quicktime" style="display:none;" />
+                <div style="color:var(--accent); margin-bottom:8px;">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <strong id="fullVideoFileLabel" style="font-size:1rem; display:block; margin-bottom:4px;">Drag &amp; Drop Video File or Click to Browse</strong>
+                <span class="muted" style="font-size:0.84rem;">Accepts MP4, WebM, MOV. Client-side validator strictly enforces &le; 100 MB.</span>
+              </div>
+            </div>
+
+            <!-- Upload Progress Bar -->
+            <div id="fullUploadProgressWrap" style="display:none; margin-bottom:20px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.88rem; margin-bottom:6px; font-weight:600;">
+                <span id="fullProgressLabel">Uploading to Cloudinary (dxhew9qpk)...</span>
+                <span id="fullProgressPercent">0%</span>
+              </div>
+              <div style="height:10px; border-radius:999px; background:var(--surface-muted); overflow:hidden;">
+                <div id="fullProgressBar" style="width:0%; height:100%; background:linear-gradient(90deg, var(--accent), #1FA855); border-radius:999px; transition:width 0.2s ease;"></div>
+              </div>
+            </div>
+
+            <!-- Or Video Link Input -->
+            <div class="field">
+              <label for="fullVideoLink">Or Paste Video Link (YouTube Shorts, Vimeo, or Cloudinary MP4 URL):</label>
+              <input type="url" id="fullVideoLink" placeholder="https://www.youtube.com/shorts/... or https://res.cloudinary.com/..." />
+            </div>
+
+            <div class="field">
+              <label for="fullSummary">Creative Cut &amp; Story Pacing Summary *</label>
+              <textarea id="fullSummary" rows="3" placeholder="Describe the narrative hook, rhythmic pacing, sound design, and color grading..." required></textarea>
+            </div>
+
+            <!-- Checkbox: Feature in 9:16 Reels Grid -->
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:24px; padding-top:20px; border-top:1px solid var(--border-soft); flex-wrap:wrap;">
+              <label style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:0.95rem; cursor:pointer;">
+                <input type="checkbox" id="fullFeatureCheck" checked style="width:20px; height:20px; accent-color:var(--accent);" />
+                <span>Feature in 9:16 Reels Grid on Homepage</span>
+              </label>
+
+              <button type="submit" class="btn btn--primary btn--lg" id="fullSubmitBtn">
+                Publish Reel to Portfolio &amp; Supabase &rarr;
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ==================================================================
+             TAB: HERO SECTION UPLOAD (Dedicated - Matching User Image 1)
+             ================================================================== -->
+        <div id="tabHeroContent" class="form-card" style="display:none; padding:var(--space-6);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px;">
+            <div>
+              <span class="eyebrow">Homepage Hero Customizer</span>
+              <h2 class="display-md">Hero Section &amp; Avatar Upload</h2>
+              <p class="muted" style="margin:4px 0 0; font-size:0.95rem;">
+                Upload your arch portrait photo, set your experience badges (1.5+ Years / 60+ Films Cut), and customize hero copy.
+              </p>
+            </div>
+            <div style="padding:8px 16px; border-radius:var(--radius-pill); background:var(--pastel-lavender-soft); border:1px solid rgba(91,75,196,0.25); font-weight:700; font-size:0.88rem; color:var(--accent);">
+              Device Local Storage · No Cloud
+            </div>
+          </div>
+
+          <form id="heroConfigForm">
+            <!-- 1. HERO PORTRAIT ARCH IMAGE (DEVICE ONLY) -->
+            <div style="background:var(--surface-muted); border-radius:var(--radius-md); padding:22px; border:1px solid var(--border-soft); margin-bottom:24px;">
+              <h3 style="font-size:1.15rem; margin:0 0 14px; display:flex; align-items:center; gap:8px;">
+                <span>👤</span> Hero Arch Portrait Photo (Device Storage)
+              </h3>
+
+              <div class="dropzone" id="heroPortraitDropzone" style="cursor:pointer; margin-bottom:14px; text-align:center; padding:24px;">
+                <input type="file" id="heroPortraitFile" accept="image/*" style="display:none;" />
+                <div style="font-size:2rem; margin-bottom:6px;">📸</div>
+                <div style="font-weight:700; font-size:0.95rem;" id="heroPortraitFileLabel">
+                  Drag &amp; drop Portrait photo here, or click to browse
+                </div>
+                <div class="muted" style="font-size:0.8rem; margin-top:4px;">
+                  Saves directly to device (assets/images/IMG_0433.jpg) &middot; Default: assests/IMG_0433.jpg
+                </div>
+              </div>
+
+              <div id="heroPortraitProgressWrap" style="display:none; margin-bottom:14px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+                  <span id="heroPortraitProgressLabel" style="font-weight:600;">Saving portrait to device...</span>
+                </div>
+                <div style="height:6px; background:var(--border-soft); border-radius:999px; overflow:hidden;">
+                  <div id="heroPortraitProgressBar" style="width:0%; height:100%; background:var(--accent); transition:width 0.2s ease;"></div>
+                </div>
+              </div>
+
+              <div class="field" style="margin-bottom:0;">
+                <label for="heroPortraitUrl" style="font-size:0.85rem;">Portrait Image Path / URL</label>
+                <input type="text" id="heroPortraitUrl" value="assests/IMG_0433.jpg" />
+              </div>
+            </div>
+
+            <!-- 2. EXPERIENCE BADGES & AVAILABILITY -->
+            <div style="background:var(--surface-muted); border-radius:var(--radius-md); padding:22px; border:1px solid var(--border-soft); margin-bottom:24px;">
+              <h3 style="font-size:1.15rem; margin:0 0 14px; display:flex; align-items:center; gap:8px;">
+                <span>🏷️</span> Experience &amp; Availability Badges
+              </h3>
+
+              <div class="form-row-2">
+                <div class="field">
+                  <label for="heroExpYearsInput">Experience Badge (Years)</label>
+                  <input type="text" id="heroExpYearsInput" value="1.5+ Years" />
+                </div>
+                <div class="field">
+                  <label for="heroExpSubtitleInput">Experience Badge (Subtitle)</label>
+                  <input type="text" id="heroExpSubtitleInput" value="60+ Reels &amp; Films Cut" />
+                </div>
+              </div>
+
+              <div class="field" style="margin-bottom:0;">
+                <label for="heroAvailInput">Availability Pill</label>
+                <input type="text" id="heroAvailInput" value="Available for freelance · India (IST)" />
+              </div>
+            </div>
+
+            <!-- 3. HERO COPY -->
+            <div style="background:var(--surface-muted); border-radius:var(--radius-md); padding:22px; border:1px solid var(--border-soft); margin-bottom:24px;">
+              <h3 style="font-size:1.15rem; margin:0 0 14px; display:flex; align-items:center; gap:8px;">
+                <span>✍️</span> Hero Copy &amp; Role Titles
+              </h3>
+
+              <div class="field">
+                <label for="heroHeadlineInput">Main Headline</label>
+                <input type="text" id="heroHeadlineInput" value="I turn ideas into stories that move people." />
+              </div>
+
+              <div class="field">
+                <label for="heroRolesInput">Creative Roles</label>
+                <input type="text" id="heroRolesInput" value="Video Editor • Scriptwriter • Graphic Designer • Storyteller" />
+              </div>
+
+              <div class="field" style="margin-bottom:0;">
+                <label for="heroLeadInput">Hero Lead Paragraph</label>
+                <textarea id="heroLeadInput" rows="2">I partner with design-led brands, founders, and creators to shape raw footage and quiet concepts into high-retention 9:16 reels and films audiences actually remember.</textarea>
+              </div>
+            </div>
+
+            <!-- 4. LIVE HERO SECTION VISUAL PREVIEW (MATCHING USER SCREENSHOT 1) -->
+            <div style="margin-bottom:24px;">
+              <span class="eyebrow">Live Visual Preview</span>
+              <h4 style="margin:4px 0 12px; font-size:1rem;">Homepage Hero Section Preview</h4>
+
+              <div style="max-width:440px; margin:0 auto; padding:28px; background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius-card); box-shadow:var(--shadow-card); position:relative;">
+                <div style="position:relative; width:220px; height:290px; margin:0 auto; border-radius:110px 110px 24px 24px; overflow:hidden; border:3px solid #fff; box-shadow:0 12px 30px rgba(0,0,0,0.08); background:#EDE9FE;">
+                  <img id="adminHeroArchPreviewImg" src="assests/IMG_0433.jpg" onerror="this.src='assets/images/IMG_0433.jpg'" alt="Hero Arch Preview" style="width:100%; height:100%; object-fit:cover; display:block;" />
+                </div>
+
+                <!-- Top Floating Experience Badge -->
+                <div style="position:absolute; top:20px; left:16px; background:#fff; border-radius:14px; padding:8px 12px; display:flex; align-items:center; gap:8px; box-shadow:0 8px 24px rgba(0,0,0,0.09); border:1px solid var(--border-soft); font-size:0.82rem;">
+                  <div style="width:26px; height:26px; border-radius:8px; background:var(--pastel-lavender-soft); color:var(--accent); display:flex; align-items:center; justify-content:center;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+                  </div>
+                  <div>
+                    <div id="adminPreviewExpYears" style="font-weight:700; line-height:1.1;">1.5+ Years</div>
+                    <div id="adminPreviewExpSub" class="muted" style="font-size:0.72rem;">60+ Reels &amp; Films Cut</div>
+                  </div>
+                </div>
+
+                <!-- Bottom Floating Availability Badge -->
+                <div style="position:absolute; bottom:20px; right:16px; background:#fff; border-radius:999px; padding:6px 14px; display:flex; align-items:center; gap:8px; box-shadow:0 8px 24px rgba(0,0,0,0.09); border:1px solid var(--border-soft); font-size:0.82rem; font-weight:600;">
+                  <span style="width:8px; height:8px; border-radius:50%; background:#1FA855; display:inline-block;"></span>
+                  <span id="adminPreviewAvail">Available for freelance</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Save & Reset Action Buttons -->
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button type="submit" class="btn btn--primary btn--lg" id="saveHeroBtn">
+                  Save Hero Section Updates &rarr;
+                </button>
+                <button type="button" class="btn btn--ghost" id="resetHeroBtn">
+                  Reset to Defaults
+                </button>
+              </div>
+              <a href="index.html" target="_blank" class="btn btn--secondary btn--sm">
+                View Live Homepage &rarr;
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- ==================================================================
+             TAB: DIRECTOR'S SHOWREEL (CLOUDINARY HOSTED dxhew9qpk)
+             ================================================================== -->
+        <div id="tabShowreelContent" class="form-card" style="display:none; padding:var(--space-6);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px;">
+            <div>
+              <span class="eyebrow">Homepage Director's Showcase</span>
+              <h2 class="display-md">Director&rsquo;s Showreel &amp; Cover Frame</h2>
+              <p class="muted" style="margin:4px 0 0; font-size:0.95rem;">
+                Upload your Director&rsquo;s Showreel video directly to Cloudinary (<strong>dxhew9qpk</strong> · strict &le; 100 MB), customize cover artwork, and preview live on your homepage.
+              </p>
+            </div>
+            <div style="padding:8px 16px; border-radius:var(--radius-pill); background:var(--pastel-lavender-soft); border:1px solid rgba(91,75,196,0.25); font-weight:700; font-size:0.88rem; color:var(--accent);">
+              Cloudinary Hosted · Strict &le; 100 MB
+            </div>
+          </div>
+
+          <form id="showreelConfigForm">
+            <!-- 1. SHOWREEL VIDEO FILE (CLOUDINARY ENGINE - STRICT <= 100 MB) -->
+            <div style="background:var(--surface-muted); border-radius:var(--radius-md); padding:22px; border:1px solid var(--border-soft); margin-bottom:24px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                <h3 style="font-size:1.15rem; margin:0; display:flex; align-items:center; gap:8px;">
+                  <span>🎬</span> Showreel Video Upload (Cloudinary dxhew9qpk)
+                </h3>
+                <span class="showreel-pill" style="font-size:0.75rem;">Cloudinary &le; 100 MB</span>
+              </div>
+
+              <!-- Cloudinary Video Dropzone & Browse Button -->
+              <div class="dropzone" id="showreelVideoDropzone" style="cursor:pointer; margin-bottom:14px; text-align:center; padding:28px 20px; border:2px dashed var(--accent); background:rgba(91,75,196,0.04); border-radius:16px;">
+                <input type="file" id="showreelVideoFile" accept="video/mp4,video/quicktime,video/webm" style="display:none;" />
+                <div style="font-size:2.4rem; margin-bottom:8px;">🎬</div>
+                <div style="font-weight:700; font-size:1.05rem; color:var(--text-main);" id="showreelVideoFileLabel">
+                  Click to Browse or Drag &amp; Drop Showreel Video File
+                </div>
+                <div class="muted" style="font-size:0.84rem; margin:6px 0 14px;">
+                  Uploads directly to Cloudinary (<strong>dxhew9qpk</strong>). Enforced limit: strictly &le; 100 MB.
+                </div>
+                <button type="button" class="btn btn--primary btn--sm" id="btnBrowseShowreelFile">
+                  Upload Video to Cloudinary (MP4, MOV, WebM &le; 100MB)
+                </button>
+              </div>
+
+              <!-- Live Upload Progress Indicator -->
+              <div id="showreelUploadProgressWrap" style="display:none; margin-bottom:16px; background:#fff; padding:12px 16px; border-radius:12px; border:1px solid var(--border-soft);">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:6px;">
+                  <span id="showreelUploadProgressLabel" style="font-weight:600; color:var(--accent);">Uploading showreel to Cloudinary (dxhew9qpk)...</span>
+                  <span id="showreelUploadProgressPercent" style="font-family:var(--font-mono); font-weight:700;">0%</span>
+                </div>
+                <div style="height:8px; background:var(--surface-muted); border-radius:999px; overflow:hidden;">
+                  <div id="showreelUploadProgressBar" style="width:0%; height:100%; background:linear-gradient(90deg, var(--accent), #1FA855); transition:width 0.2s ease;"></div>
+                </div>
+              </div>
+
+              <!-- Local Video Immediate Preview Player -->
+              <div id="showreelLocalVideoWrap" style="display:none; margin-bottom:16px; border-radius:12px; overflow:hidden; background:#000; border:1px solid var(--border-soft);">
+                <video id="showreelLocalVideoPreview" controls style="width:100%; max-height:280px; display:block; margin:0 auto;"></video>
+              </div>
+
+              <div class="field" style="margin-bottom:0;">
+                <label for="showreelVideoUrl" style="font-size:0.85rem; font-weight:600;">Active Showreel Video URL (Cloudinary / Direct MP4 URL):</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" id="showreelVideoUrl" placeholder="https://res.cloudinary.com/dxhew9qpk/video/upload/... or direct link" style="flex:1;" />
+                  <button type="button" class="btn btn--secondary btn--sm" id="testShowreelPlayBtn">Play Showreel</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. SHOWREEL COVER ARTWORK -->
+            <div style="background:var(--surface-muted); border-radius:var(--radius-md); padding:22px; border:1px solid var(--border-soft); margin-bottom:24px;">
+              <h3 style="font-size:1.15rem; margin:0 0 14px; display:flex; align-items:center; gap:8px;">
+                <span>🖼️</span> Showreel Cover Poster Frame
+              </h3>
+
+              <div class="form-row-2">
+                <div class="field">
+                  <label for="showreelCoverFile">Upload Cover Artwork File (Device)</label>
+                  <input type="file" id="showreelCoverFile" accept="image/*" />
+                  <small class="muted" style="font-size:0.78rem;">Default: assets/images/showreel-cover.jpg (Architectural Arches)</small>
+                </div>
+                <div class="field">
+                  <label for="showreelCoverUrl">Cover Image Path / URL</label>
+                  <input type="text" id="showreelCoverUrl" value="assets/images/showreel-cover.jpg" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. SHOWREEL LABELS & TEXT (MATCHING USER SCREENSHOT 2) -->
+            <div style="background:var(--surface-muted); border-radius:var(--radius-md); padding:22px; border:1px solid var(--border-soft); margin-bottom:24px;">
+              <h3 style="font-size:1.15rem; margin:0 0 14px; display:flex; align-items:center; gap:8px;">
+                <span>📝</span> Showreel Card Details (Matching Screenshot)
+              </h3>
+
+              <div class="form-row-2">
+                <div class="field">
+                  <label for="showreelTitlePillInput">Top Left Pill (Showreel Title)</label>
+                  <input type="text" id="showreelTitlePillInput" value="2026 Director's Showreel · Gourav Mewara" />
+                </div>
+                <div class="field">
+                  <label for="showreelDurationPillInput">Top Right Pill (Duration / Format)</label>
+                  <input type="text" id="showreelDurationPillInput" value="01:30 · 4K Master" />
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="field">
+                  <label for="showreelHeadlineInput">Card Headline</label>
+                  <input type="text" id="showreelHeadlineInput" value="Craft, Rhythm &amp; Quiet Emotion" />
+                </div>
+                <div class="field">
+                  <label for="showreelSubtextInput">Card Description</label>
+                  <input type="text" id="showreelSubtextInput" value="Selected highlights from Indian D2C brand films, 9:16 vertical reels, and documentaries." />
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. LIVE SHOWREEL CARD PREVIEW (MATCHING USER SCREENSHOT 2) -->
+            <div style="margin-bottom:24px;">
+              <span class="eyebrow">Live Visual Preview</span>
+              <h4 style="margin:4px 0 12px; font-size:1rem;">Homepage Showreel Card Preview</h4>
+              <div class="showreel-card" style="max-width:840px; margin:0 auto; box-shadow:var(--shadow-card);">
+                <div class="showreel-stage" style="cursor:default;">
+                  <img id="adminShowreelPreviewImg" src="assets/images/showreel-cover.jpg" alt="Showreel Preview Frame" style="width:100%; aspect-ratio:16/9; object-fit:cover;" />
+                  <div class="showreel-overlay">
+                    <div class="showreel-top">
+                      <span class="showreel-pill" id="adminPreviewTitlePill">2026 Director's Showreel · Gourav Mewara</span>
+                      <span class="showreel-pill" id="adminPreviewDurationPill">01:30 · 4K Master</span>
+                    </div>
+                    <button type="button" class="showreel-play-center" id="adminPreviewPlayBtn" aria-label="Play Preview">
+                      <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+                    </button>
+                    <div class="showreel-bottom">
+                      <div>
+                        <h3 id="adminPreviewHeadline" style="margin:0 0 4px; font-family:var(--font-serif); font-size:1.4rem;">Craft, Rhythm &amp; Quiet Emotion</h3>
+                        <p id="adminPreviewSubtext" style="margin:0; font-size:0.88rem; opacity:0.9;">Selected highlights from Indian D2C brand films, 9:16 vertical reels, and documentaries.</p>
+                      </div>
+                      <span class="showreel-pill">Click to Watch</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Save & Reset Action Buttons -->
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button type="submit" class="btn btn--primary btn--lg" id="saveShowreelBtn">
+                  Save Showreel Updates &rarr;
+                </button>
+                <button type="button" class="btn btn--ghost" id="resetShowreelBtn">
+                  Reset to Defaults
+                </button>
+              </div>
+              <a href="index.html" target="_blank" class="btn btn--secondary btn--sm">
+                View Live Homepage &rarr;
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- ==================================================================
+             TAB 2: UPLOAD GRAPHIC DESIGN & CASE STUDY
+             ================================================================== -->
+        <div id="tabGraphicContent" class="form-card" style="display:none; padding:var(--space-6);">
+          <div style="margin-bottom:22px;">
+            <span class="eyebrow">Posters · Thumbnails · Scripts</span>
+            <h2 class="display-md">Upload Visual Asset or Case Study</h2>
+            <p class="muted" style="margin:4px 0 0; font-size:0.95rem;">
+              Add YouTube thumbnail designs, branding posters, or narrative script treatments to your portfolio.
+            </p>
+          </div>
+
+          <form id="graphicUploadForm">
+            <div class="form-row-2">
+              <div class="field">
+                <label for="graphicTitle">Project / Asset Title *</label>
+                <input type="text" id="graphicTitle" placeholder="e.g. High-CTR Tech Essay Thumbnail Series" required />
+              </div>
+              <div class="field">
+                <label for="graphicCategory">Discipline *</label>
+                <select id="graphicCategory" required>
+                  <option value="graphic-design" selected>Graphic Design (Posters / Thumbnails)</option>
+                  <option value="script-writing">Script Writing (Treatments / Pitches)</option>
+                  <option value="storytelling">Storytelling (Narrative Case Study)</option>
+                  <option value="freelance">Commercial Brand Asset</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="field">
+                <label for="graphicClient">Client / Brand *</label>
+                <input type="text" id="graphicClient" placeholder="e.g. Studio Craft · Bangalore" required />
+              </div>
+              <div class="field">
+                <label for="graphicMetric">Impact Metric</label>
+                <input type="text" id="graphicMetric" placeholder="e.g. 14.8% Click-Through Rate" value="14.8% CTR · Editorial" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="graphicImage">Cover Image URL / Path *</label>
+              <input type="text" id="graphicImage" placeholder="assets/images/proj-design.jpg or Cloudinary URL" value="assets/images/proj-design.jpg" required />
+            </div>
+
+            <div class="field">
+              <label for="graphicSummary">Project Summary &amp; Art Direction *</label>
+              <textarea id="graphicSummary" rows="3" placeholder="Explain the visual composition, typography, and story behind this work..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--lg" id="graphicSubmitBtn">
+              Publish Graphic Project &rarr;
+            </button>
+          </form>
+        </div>
+
+        <!-- ==================================================================
+             TAB 3: MANAGE LIVE INVENTORY
+             ================================================================== -->
+        <div id="tabManageContent" style="display:none;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px;">
+            <div>
+              <span class="eyebrow">Portfolio Inventory</span>
+              <h2 class="display-md">All Live Projects &amp; Custom Reels</h2>
+              <p class="muted" style="margin:4px 0 0; font-size:0.92rem;">
+                Custom uploads are saved to persistent local storage and synced with Supabase.
+              </p>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn--secondary btn--sm" id="exportBackupBtn">Export JSON</button>
+              <button class="btn btn--ghost btn--sm" id="resetCustomProjectsBtn" style="color:#C81E1E;">Clear Custom Uploads</button>
+            </div>
+          </div>
+
+          <div id="adminProjectList" style="display:flex; flex-direction:column; gap:14px;"></div>
+        </div>
+
+        <!-- ==================================================================
+             TAB 4: SUPABASE & CLOUD CONFIG (.env)
+             ================================================================== -->
+        <div id="tabCloudContent" style="display:none;">
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--space-4); margin-bottom:28px;">
+
+            <!-- Cloudinary Card -->
+            <div class="discipline-card surface-video-editing">
+              <div>
+                <span class="tag tag--video-editing" style="margin-bottom:12px;">Cloudinary Media</span>
+                <h3 style="font-size:1.3rem;">dxhew9qpk</h3>
+                <p class="muted" style="font-size:0.86rem; margin:8px 0 14px; line-height:1.6;">
+                  Environment: <strong>DX</strong><br />
+                  API Key: <code>Gl1M_6KeB5MiYBjiALXNGcPXpL4</code><br />
+                  Video Limit: <strong>&le; 100 MB</strong>
+                </p>
+              </div>
+              <div class="discipline-card__footer">
+                <span style="color:#188F47; font-weight:700;">Active &amp; Ready</span>
+              </div>
+            </div>
+
+            <!-- Firebase Card -->
+            <div class="discipline-card surface-storytelling">
+              <div>
+                <span class="tag tag--storytelling" style="margin-bottom:12px;">Firebase Google Auth</span>
+                <h3 style="font-size:1.3rem;">cinestroke-design</h3>
+                <p class="muted" style="font-size:0.86rem; margin:8px 0 14px; line-height:1.6;">
+                  Auth Domain: <code>cinestroke-design.firebaseapp.com</code><br />
+                  Authorized: <code>gourav.mewara4242@gmail.com</code><br />
+                  Storage: <code>cinestroke-design.firebasestorage.app</code>
+                </p>
+              </div>
+              <div class="discipline-card__footer">
+                <span style="color:#5B4BC4; font-weight:700;">Configured</span>
+              </div>
+            </div>
+
+            <!-- Supabase Card -->
+            <div class="discipline-card surface-motion-graphics">
+              <div>
+                <span class="tag tag--motion-graphics" style="margin-bottom:12px;">Supabase Database</span>
+                <h3 style="font-size:1.3rem;">cigphrvgzalovxyvyvah</h3>
+                <p class="muted" style="font-size:0.86rem; margin:8px 0 14px; line-height:1.6;">
+                  URL: <code>https://cigphrvgzalovxyvyvah.supabase.co</code><br />
+                  Table: <code>projects</code><br />
+                  Key: <code>sb_publishable_8vu...BRKWY</code><br />
+                  Status: <span id="supabaseLiveStatusText" style="color:#188F47; font-weight:700;">Live Sync Enabled</span>
+                </p>
+              </div>
+              <div class="discipline-card__footer">
+                <span id="supabaseStatusBadge" style="font-weight:700; color:#188F47;">Key Configured</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Environment Override Settings Form -->
+          <div class="form-card" style="padding:var(--space-6); margin-bottom:28px;">
+            <div style="margin-bottom:18px;">
+              <span class="eyebrow">Runtime Environment Variables (.env)</span>
+              <h3 style="font-size:1.4rem;">Supabase &amp; Cloudinary Live Settings</h3>
+              <p class="muted" style="margin:4px 0 0; font-size:0.92rem;">
+                Enter your live Supabase anon key here to sync uploads straight into your Supabase database in addition to local storage.
+              </p>
+            </div>
+
+            <form id="envSettingsForm">
+              <div class="field">
+                <label for="envSupabaseUrl">Supabase URL</label>
+                <input type="url" id="envSupabaseUrl" value="https://cigphrvgzalovxyvyvah.supabase.co" readonly style="background:var(--surface-muted);" />
+              </div>
+
+              <div class="field">
+                <label for="envSupabaseAnonKey">NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY / ANON_KEY</label>
+                <input type="text" id="envSupabaseAnonKey" placeholder="Paste your Supabase publishable/anon key here..." value="sb_publishable_8vu9zugU1x1F1UNWPuFqdA_g77BRKWY" />
+                <small class="muted" style="font-size:0.78rem;">Loaded from your environment configuration.</small>
+              </div>
+
+              <div class="field">
+                <label for="envCloudinaryPreset">Cloudinary Upload Preset (Unsigned)</label>
+                <input type="text" id="envCloudinaryPreset" value="cinestroke_reels" placeholder="e.g. cinestroke_reels or ml_default" />
+                <small class="muted" style="font-size:0.78rem;">Configured in Cloudinary Settings &rarr; Upload &rarr; Upload presets.</small>
+              </div>
+
+              <div style="display:flex; gap:12px; margin-top:20px; flex-wrap:wrap;">
+                <button type="submit" class="btn btn--primary">Save Cloud Settings</button>
+                <button type="button" class="btn btn--secondary" id="testSupabaseBtn">Test Supabase Connection</button>
+                <button type="button" class="btn btn--ghost" id="syncAllToSupabaseBtn">Sync All Local Projects to Supabase</button>
+                <button type="button" class="btn btn--ghost" id="pullFromSupabaseBtn">Fetch Latest from Supabase</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Supabase SQL Table Setup Helper -->
+          <div class="case-block">
+            <span class="eyebrow">Supabase SQL Schema</span>
+            <h3 style="margin-bottom:10px;">Create `projects` Table in Supabase</h3>
+            <p class="muted" style="margin:0 0 14px; font-size:0.92rem;">
+              Run this one-click SQL query in your <strong>Supabase Dashboard &rarr; SQL Editor</strong> to create the database table:
+            </p>
+            <pre style="background:var(--surface-muted); padding:16px; border-radius:12px; font-size:0.83rem; font-family:var(--font-mono); overflow-x:auto; border:1px solid var(--border-soft); margin:0 0 16px; max-height:280px;"><code>-- 1. Create projects table
+CREATE TABLE IF NOT EXISTS public.projects (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  category_label TEXT,
+  client_name TEXT,
+  year TEXT DEFAULT '2026',
+  duration TEXT,
+  summary TEXT,
+  video_url TEXT,
+  aspect_ratio TEXT DEFAULT '9:16',
+  image_url TEXT,
+  featured BOOLEAN DEFAULT true,
+  tools TEXT,
+  author_email TEXT DEFAULT 'gourav.mewara4242@gmail.com',
+  created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+
+-- 2. Enable Row Level Security & Policies
+ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read" ON public.projects;
+CREATE POLICY "Allow public read" ON public.projects FOR SELECT TO public USING (true);
+
+DROP POLICY IF EXISTS "Allow insert" ON public.projects;
+CREATE POLICY "Allow insert" ON public.projects FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow update" ON public.projects;
+CREATE POLICY "Allow update" ON public.projects FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow delete" ON public.projects;
+CREATE POLICY "Allow delete" ON public.projects FOR DELETE TO anon, authenticated USING (true);
+
+-- 3. Create Storage bucket 'reels'
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('reels', 'reels', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+DROP POLICY IF EXISTS "Allow public read reels" ON storage.objects;
+CREATE POLICY "Allow public read reels" ON storage.objects FOR SELECT TO public USING (bucket_id = 'reels');
+
+DROP POLICY IF EXISTS "Allow upload reels" ON storage.objects;
+CREATE POLICY "Allow upload reels" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id = 'reels');</code></pre>
+            <button class="btn btn--ghost btn--sm" id="copySqlBtn">Copy SQL Query</button>
+          </div>
+
+          <!-- Supabase Delete SQL Queries & Policy -->
+          <div class="case-block" style="margin-top:24px;">
+            <span class="eyebrow">Database Deletion SQL</span>
+            <h3 style="margin-bottom:10px;">SQL Queries to Delete Videos in Supabase</h3>
+            <p class="muted" style="margin:0 0 14px; font-size:0.92rem;">
+              If your database has Row Level Security enabled, run the <strong>DELETE Policy</strong> query first. Then use the SQL commands below to delete any video directly from your Supabase SQL Editor:
+            </p>
+            <pre style="background:var(--surface-muted); padding:16px; border-radius:12px; font-size:0.83rem; font-family:var(--font-mono); overflow-x:auto; border:1px solid var(--border-soft); margin:0 0 16px; max-height:280px;"><code>-- 1. Ensure Supabase allows DELETE from the Admin panel:
+ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow delete" ON public.projects;
+CREATE POLICY "Allow delete" 
+  ON public.projects 
+  FOR DELETE 
+  TO anon, authenticated 
+  USING (true);
+
+-- 2. Delete a specific video by its ID:
+DELETE FROM public.projects WHERE id = 'YOUR_PROJECT_ID_HERE';
+
+-- 3. Delete all custom uploaded videos:
+DELETE FROM public.projects WHERE id LIKE 'custom-%';
+
+-- 4. Delete all rows from projects table:
+DELETE FROM public.projects;</code></pre>
+            <button class="btn btn--ghost btn--sm" id="copyDeleteSqlBtn">Copy Delete SQL Queries</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer-mount"></div>
+
+  <!-- Page Logic Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const authGate = document.getElementById("adminAuthGate");
+      const dashboard = document.getElementById("adminDashboardView");
+      const googleBtn = document.getElementById("pageGoogleLoginBtn");
+      const loginForm = document.getElementById("pageLoginForm");
+      const loginErr = document.getElementById("pageLoginError");
+
+      function updateView() {
+        if (window.isAdminLoggedIn && window.isAdminLoggedIn()) {
+          authGate.style.display = "none";
+          dashboard.style.display = "block";
+          const session = window.getAdminSession();
+          if (session && session.email) {
+            const label = document.getElementById("adminUserEmailLabel");
+            if (label) label.textContent = session.email;
+          }
+          renderProjectList();
+          loadEnvSettings();
+        } else {
+          authGate.style.display = "block";
+          dashboard.style.display = "none";
+        }
+      }
+
+      // Google Sign-In on page
+      if (googleBtn) {
+        googleBtn.addEventListener("click", async () => {
+          googleBtn.disabled = true;
+          googleBtn.style.opacity = "0.7";
+          try {
+            const res = await window.signInWithGoogle();
+            if (res && res.success) {
+              updateView();
+              if (window.showToast) window.showToast("Signed in as Gourav Mewara!");
+            }
+          } catch (err) {
+            loginErr.textContent = err.message || "Google Sign-In failed.";
+            loginErr.style.display = "block";
+          } finally {
+            googleBtn.disabled = false;
+            googleBtn.style.opacity = "1";
+          }
+        });
+      }
+
+      // Password fallback
+      if (loginForm) {
+        loginForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const email = document.getElementById("pageEmailInput").value.trim().toLowerCase();
+          const pass = document.getElementById("pagePasswordInput").value;
+
+          if (email !== "gourav.mewara4242@gmail.com") {
+            loginErr.textContent = "Unauthorized: Only gourav.mewara4242@gmail.com is permitted.";
+            loginErr.style.display = "block";
+            return;
+          }
+
+          if (!pass || pass.length < 3) {
+            loginErr.textContent = "Please enter your admin password.";
+            loginErr.style.display = "block";
+            return;
+          }
+
+          window.setAdminSession(email, true, "Gourav Mewara", "assests/IMG_0433.jpg", "password");
+          updateView();
+        });
+      }
+
+      // Logout
+      const logoutBtn = document.getElementById("pageLogoutBtn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          window.clearAdminSession();
+          updateView();
+        });
+      }
+
+      // Tab switcher
+      const tabs = ["upload", "hero", "showreel", "graphic", "manage", "cloud"];
+      tabs.forEach((tab) => {
+        const btn = document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            tabs.forEach((t) => {
+              const b = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`);
+              const content = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}Content`);
+              if (b) b.classList.toggle("is-active", t === tab);
+              if (content) content.style.display = t === tab ? "block" : "none";
+            });
+            if (tab === "manage") renderProjectList();
+          });
+        }
+      });
+
+      // Video dropzone & <= 100 MB validation
+      const dropzone = document.getElementById("fullVideoDropzone");
+      const fileInput = document.getElementById("fullVideoFile");
+      const fileLabel = document.getElementById("fullVideoFileLabel");
+      let currentFile = null;
+
+      if (dropzone && fileInput) {
+        dropzone.addEventListener("click", () => fileInput.click());
+        dropzone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          dropzone.style.borderColor = "var(--accent)";
+        });
+        dropzone.addEventListener("dragleave", () => {
+          dropzone.style.borderColor = "";
+        });
+        dropzone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          dropzone.style.borderColor = "";
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleVideoSelect(e.dataTransfer.files[0]);
+          }
+        });
+
+        fileInput.addEventListener("change", (e) => {
+          if (e.target.files && e.target.files[0]) {
+            handleVideoSelect(e.target.files[0]);
+          }
+        });
+      }
+
+      function handleVideoSelect(file) {
+        if (file.size > 100 * 1024 * 1024) {
+          const mb = (file.size / (1024 * 1024)).toFixed(1);
+          alert(`File size is ${mb} MB! Exceeds the strict 100 MB Cloudinary limit. Please choose a video under 100 MB.`);
+          fileInput.value = "";
+          currentFile = null;
+          fileLabel.textContent = "Drag & Drop Video File or Click to Browse";
+          return;
+        }
+        currentFile = file;
+        const mb = (file.size / (1024 * 1024)).toFixed(1);
+        fileLabel.textContent = `Selected: ${file.name} (${mb} MB) — Ready to upload`;
+      }
+
+      // Tab 1: Full Video Upload Form Submit
+      const uploadForm = document.getElementById("fullUploadForm");
+      const submitBtn = document.getElementById("fullSubmitBtn");
+      const progressWrap = document.getElementById("fullUploadProgressWrap");
+      const progressBar = document.getElementById("fullProgressBar");
+      const progressPercent = document.getElementById("fullProgressPercent");
+
+      if (uploadForm) {
+        uploadForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Uploading to Cloudinary...";
+
+          try {
+            let videoUrl = document.getElementById("fullVideoLink").value.trim();
+
+            let videoPoster = null;
+            if (currentFile) {
+              progressWrap.style.display = "block";
+              const uploadRes = await window.uploadToCloudinary(currentFile, "video", (pct) => {
+                progressBar.style.width = `${pct}%`;
+                progressPercent.textContent = `${pct}%`;
+              });
+              videoUrl = uploadRes.url;
+              if (uploadRes.posterUrl) videoPoster = uploadRes.posterUrl;
+            }
+
+            const catId = document.getElementById("fullCategory").value;
+            const catMeta = (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.categories.find((c) => c.id === catId)) || {
+              name: "Video Editing"
+            };
+
+            // No dummy thumbnail fallback: derive from Cloudinary poster if available, or leave clean for native HTML5 video preview
+            const finalImage = videoPoster || (videoUrl && videoUrl.includes("res.cloudinary.com") ? videoUrl.replace(/\.[a-zA-Z0-9]+$/, ".jpg") : "");
+
+            const newProj = {
+              id: `custom-${Date.now()}`,
+              isCustom: true,
+              title: document.getElementById("fullTitle").value.trim(),
+              category: catId,
+              categoryLabel: catMeta.name,
+              client: "Gourav Mewara Studio",
+              year: "2026",
+              duration: "00:45 · 9:16 Reel",
+              summary: document.getElementById("fullSummary").value.trim(),
+              isVideo: true,
+              aspect_ratio: "9:16",
+              featured: document.getElementById("fullFeatureCheck").checked,
+              image: finalImage,
+              videoUrl: videoUrl || "",
+              resultMetric: "Featured 9:16 Cut",
+              role: "Lead Editor & Storyteller",
+              tools: ["Premiere Pro", "DaVinci Resolve", "After Effects"],
+              brief: "Project created in Gourav Mewara Admin Panel.",
+              challenge: "Fast turnaround high-retention vertical pacing.",
+              approach: "Rhythmic cutting, audio cleanup, and filmic DaVinci Resolve color grading.",
+              output: "4K 9:16 vertical reel.",
+              result: "Published to live portfolio.",
+              author_email: "gourav.mewara4242@gmail.com",
+              created_at: new Date().toISOString()
+            };
+
+            const list = window.getCustomProjects();
+            list.unshift(newProj);
+            window.saveCustomProjects(list);
+
+            // Sync to Supabase in background
+            const syncRes = await window.syncProjectToSupabase(newProj);
+
+            alert(`Successfully published "${newProj.title}" to portfolio!\n\n${syncRes.supabaseMessage}`);
+            uploadForm.reset();
+            currentFile = null;
+            fileLabel.textContent = "Drag & Drop Video File or Click to Browse";
+            progressWrap.style.display = "none";
+
+            document.getElementById("tabManageBtn").click();
+          } catch (err) {
+            alert(err.message || "Upload failed.");
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Publish Reel to Portfolio & Supabase →";
+          }
+        });
+      }
+
+      // Tab 2: Graphic Design Upload Form
+      const graphicForm = document.getElementById("graphicUploadForm");
+      if (graphicForm) {
+        graphicForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const catId = document.getElementById("graphicCategory").value;
+          const catMeta = (window.PORTFOLIO_DATA && window.PORTFOLIO_DATA.categories.find((c) => c.id === catId)) || {
+            name: "Graphic Design"
+          };
+
+          const newProj = {
+            id: `custom-${Date.now()}`,
+            isCustom: true,
+            title: document.getElementById("graphicTitle").value.trim(),
+            category: catId,
+            categoryLabel: catMeta.name,
+            client: document.getElementById("graphicClient").value.trim(),
+            year: "2026",
+            duration: "Asset Package",
+            summary: document.getElementById("graphicSummary").value.trim(),
+            isVideo: false,
+            featured: false,
+            image: document.getElementById("graphicImage").value.trim() || "assets/images/proj-design.jpg",
+            videoUrl: "",
+            resultMetric: document.getElementById("graphicMetric").value.trim() || "Published",
+            role: "Graphic Designer & Art Director",
+            tools: ["Photoshop", "Illustrator"],
+            brief: "Visual asset designed for high CTR and editorial feel.",
+            challenge: "Standing out in competitive feeds with clean typography.",
+            approach: "Bold contrast, intentional negative space, and refined palette.",
+            output: "High-resolution master asset.",
+            result: "Delivered to client."
+          };
+
+          const list = window.getCustomProjects();
+          list.unshift(newProj);
+          window.saveCustomProjects(list);
+          await window.syncProjectToSupabase(newProj);
+
+          alert(`Published "${newProj.title}"!`);
+          graphicForm.reset();
+          document.getElementById("tabManageBtn").click();
+        });
+      }
+
+      // ======================================================================
+      // INDEXEDDB HELPER FOR ZERO-CLOUD DEVICE STORAGE
+      // ======================================================================
+      const DEVICE_DB_NAME = "GouravDeviceDB";
+      const DEVICE_DB_STORE = "media";
+
+      function openDeviceDB() {
+        return new Promise((resolve, reject) => {
+          const req = indexedDB.open(DEVICE_DB_NAME, 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(DEVICE_DB_STORE)) {
+              db.createObjectStore(DEVICE_DB_STORE);
+            }
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      }
+
+      async function saveDeviceMedia(key, blob) {
+        try {
+          const db = await openDeviceDB();
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction(DEVICE_DB_STORE, "readwrite");
+            tx.objectStore(DEVICE_DB_STORE).put(blob, key);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = () => reject(tx.error);
+          });
+        } catch (e) {
+          console.warn("IndexedDB save error:", e);
+          return false;
+        }
+      }
+
+      // ======================================================================
+      // HERO & SHOWREEL CONFIGURATION DEFAULTS
+      // ======================================================================
+      const HERO_DEFAULTS = {
+        heroPortraitUrl: "assests/IMG_0433.jpg",
+        heroExpYears: "1.5+ Years",
+        heroExpSubtitle: "60+ Reels & Films Cut",
+        heroHeadline: "I turn ideas into stories that move people.",
+        heroRoles: "Video Editor • Scriptwriter • Graphic Designer • Storyteller",
+        heroLead: "I partner with design-led brands, founders, and creators to shape raw footage and quiet concepts into high-retention 9:16 reels and films audiences actually remember.",
+        heroAvailText: "Available for freelance · India (IST)",
+        showreelVideoUrl: "assets/images/showreel.mp4",
+        showreelCoverUrl: "assets/images/showreel-cover.jpg",
+        showreelTitlePill: "2026 Director's Showreel · Gourav Mewara",
+        showreelDurationPill: "01:30 · 4K Master",
+        showreelHeadline: "Craft, Rhythm & Quiet Emotion",
+        showreelSubtext: "Selected highlights from Indian D2C brand films, 9:16 vertical reels, and documentaries."
+      };
+
+      function getStoredHeroConfig() {
+        try {
+          const raw = localStorage.getItem("gourav_hero_config");
+          if (raw) return Object.assign({}, HERO_DEFAULTS, JSON.parse(raw));
+        } catch (e) {}
+        return Object.assign({}, HERO_DEFAULTS);
+      }
+
+      function saveHeroConfigToStorage(partial) {
+        const current = getStoredHeroConfig();
+        const merged = Object.assign({}, current, partial, { updatedAt: new Date().toISOString() });
+        localStorage.setItem("gourav_hero_config", JSON.stringify(merged));
+        return merged;
+      }
+
+      // Live Hero Preview Update
+      function updateAdminHeroPreview() {
+        const portEl = document.getElementById("heroPortraitUrl");
+        const expYEl = document.getElementById("heroExpYearsInput");
+        const expSEl = document.getElementById("heroExpSubtitleInput");
+        const availEl = document.getElementById("heroAvailInput");
+
+        const previewImg = document.getElementById("adminHeroArchPreviewImg");
+        const previewExpY = document.getElementById("adminPreviewExpYears");
+        const previewExpS = document.getElementById("adminPreviewExpSub");
+        const previewAvail = document.getElementById("adminPreviewAvail");
+
+        if (previewImg && portEl) previewImg.src = portEl.value.trim() || HERO_DEFAULTS.heroPortraitUrl;
+        if (previewExpY && expYEl) previewExpY.textContent = expYEl.value.trim() || HERO_DEFAULTS.heroExpYears;
+        if (previewExpS && expSEl) previewExpS.textContent = expSEl.value.trim() || HERO_DEFAULTS.heroExpSubtitle;
+        if (previewAvail && availEl) previewAvail.textContent = availEl.value.trim() || HERO_DEFAULTS.heroAvailText;
+      }
+
+      // Live Showreel Preview Update
+      function updateAdminShowreelPreview() {
+        const coverEl = document.getElementById("showreelCoverUrl");
+        const titleEl = document.getElementById("showreelTitlePillInput");
+        const durEl = document.getElementById("showreelDurationPillInput");
+        const headEl = document.getElementById("showreelHeadlineInput");
+        const subEl = document.getElementById("showreelSubtextInput");
+
+        const previewImg = document.getElementById("adminShowreelPreviewImg");
+        const previewTitle = document.getElementById("adminPreviewTitlePill");
+        const previewDur = document.getElementById("adminPreviewDurationPill");
+        const previewHead = document.getElementById("adminPreviewHeadline");
+        const previewSub = document.getElementById("adminPreviewSubtext");
+
+        if (previewImg && coverEl) previewImg.src = coverEl.value.trim() || HERO_DEFAULTS.showreelCoverUrl;
+        if (previewTitle && titleEl) previewTitle.textContent = titleEl.value.trim() || HERO_DEFAULTS.showreelTitlePill;
+        if (previewDur && durEl) previewDur.textContent = durEl.value.trim() || HERO_DEFAULTS.showreelDurationPill;
+        if (previewHead && headEl) previewHead.textContent = headEl.value.trim() || HERO_DEFAULTS.showreelHeadline;
+        if (previewSub && subEl) previewSub.textContent = subEl.value.trim() || HERO_DEFAULTS.showreelSubtext;
+      }
+
+      function loadHeroConfig() {
+        const cfg = getStoredHeroConfig();
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val !== undefined) el.value = val;
+        };
+
+        setVal("heroPortraitUrl", cfg.heroPortraitUrl || HERO_DEFAULTS.heroPortraitUrl);
+        setVal("heroExpYearsInput", cfg.heroExpYears || HERO_DEFAULTS.heroExpYears);
+        setVal("heroExpSubtitleInput", cfg.heroExpSubtitle || HERO_DEFAULTS.heroExpSubtitle);
+        setVal("heroAvailInput", cfg.heroAvailText || HERO_DEFAULTS.heroAvailText);
+        setVal("heroHeadlineInput", cfg.heroHeadline || HERO_DEFAULTS.heroHeadline);
+        setVal("heroRolesInput", cfg.heroRoles || HERO_DEFAULTS.heroRoles);
+        setVal("heroLeadInput", cfg.heroLead || HERO_DEFAULTS.heroLead);
+
+        updateAdminHeroPreview();
+      }
+
+      function loadShowreelConfig() {
+        const cfg = getStoredHeroConfig();
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val !== undefined) el.value = val;
+        };
+
+        setVal("showreelVideoUrl", cfg.showreelVideoUrl || HERO_DEFAULTS.showreelVideoUrl);
+        setVal("showreelCoverUrl", cfg.showreelCoverUrl || HERO_DEFAULTS.showreelCoverUrl);
+        setVal("showreelTitlePillInput", cfg.showreelTitlePill || HERO_DEFAULTS.showreelTitlePill);
+        setVal("showreelDurationPillInput", cfg.showreelDurationPill || HERO_DEFAULTS.showreelDurationPill);
+        setVal("showreelHeadlineInput", cfg.showreelHeadline || HERO_DEFAULTS.showreelHeadline);
+        setVal("showreelSubtextInput", cfg.showreelSubtext || HERO_DEFAULTS.showreelSubtext);
+
+        updateAdminShowreelPreview();
+      }
+
+      // Listeners for live typing preview in Hero
+      ["heroPortraitUrl", "heroExpYearsInput", "heroExpSubtitleInput", "heroAvailInput"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", updateAdminHeroPreview);
+      });
+
+      // Listeners for live typing preview in Showreel
+      ["showreelCoverUrl", "showreelTitlePillInput", "showreelDurationPillInput", "showreelHeadlineInput", "showreelSubtextInput"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", updateAdminShowreelPreview);
+      });
+
+      // ----------------------------------------------------------------------
+      // HERO SECTION UPLOAD (DEVICE STORAGE)
+      // ----------------------------------------------------------------------
+      const heroDropzone = document.getElementById("heroPortraitDropzone");
+      const heroFileInput = document.getElementById("heroPortraitFile");
+      const heroFileLabel = document.getElementById("heroPortraitFileLabel");
+      const heroProgressWrap = document.getElementById("heroPortraitProgressWrap");
+      const heroProgressBar = document.getElementById("heroPortraitProgressBar");
+      const heroProgressLabel = document.getElementById("heroPortraitProgressLabel");
+
+      if (heroDropzone && heroFileInput) {
+        heroDropzone.addEventListener("click", () => heroFileInput.click());
+        heroDropzone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          heroDropzone.style.borderColor = "var(--accent)";
+        });
+        heroDropzone.addEventListener("dragleave", () => {
+          heroDropzone.style.borderColor = "";
+        });
+        heroDropzone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          heroDropzone.style.borderColor = "";
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleHeroPortraitUpload(e.dataTransfer.files[0]);
+          }
+        });
+        heroFileInput.addEventListener("change", (e) => {
+          if (e.target.files && e.target.files[0]) {
+            handleHeroPortraitUpload(e.target.files[0]);
+          }
+        });
+      }
+
+      async function handleHeroPortraitUpload(file) {
+        if (!file) return;
+        if (heroFileLabel) heroFileLabel.textContent = `Selected: ${file.name}`;
+        if (heroProgressWrap) heroProgressWrap.style.display = "block";
+        if (heroProgressBar) heroProgressBar.style.width = "30%";
+        if (heroProgressLabel) heroProgressLabel.textContent = "Saving portrait to device storage...";
+
+        try {
+          // 1. Save to IndexedDB
+          await saveDeviceMedia("hero_portrait", file);
+          if (heroProgressBar) heroProgressBar.style.width = "60%";
+
+          // 2. Post directly to server.ps1 endpoint to save on device disk
+          try {
+            const resp = await fetch("/api/upload-hero-portrait", {
+              method: "POST",
+              headers: { "Content-Type": file.type || "image/jpeg" },
+              body: file
+            });
+            if (resp.ok) {
+              const resData = await resp.json();
+              document.getElementById("heroPortraitUrl").value = resData.url || "assets/images/IMG_0433.jpg";
+            }
+          } catch (e) {
+            console.warn("Direct disk write notice:", e);
+          }
+
+          // 3. Use FileReader data URL for instant live preview
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            if (!document.getElementById("heroPortraitUrl").value) {
+              document.getElementById("heroPortraitUrl").value = evt.target.result;
+            }
+            updateAdminHeroPreview();
+          };
+          reader.readAsDataURL(file);
+
+          if (heroProgressBar) heroProgressBar.style.width = "100%";
+          if (heroProgressLabel) heroProgressLabel.textContent = "Portrait saved to device!";
+        } catch (err) {
+          console.warn("Portrait save error:", err);
+        }
+      }
+
+      // Hero Form Submission
+      const heroConfigForm = document.getElementById("heroConfigForm");
+      if (heroConfigForm) {
+        heroConfigForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const saveBtn = document.getElementById("saveHeroBtn");
+          if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.textContent = "Saving...";
+          }
+
+          const heroData = {
+            heroPortraitUrl: document.getElementById("heroPortraitUrl").value.trim() || HERO_DEFAULTS.heroPortraitUrl,
+            heroExpYears: document.getElementById("heroExpYearsInput").value.trim() || HERO_DEFAULTS.heroExpYears,
+            heroExpSubtitle: document.getElementById("heroExpSubtitleInput").value.trim() || HERO_DEFAULTS.heroExpSubtitle,
+            heroAvailText: document.getElementById("heroAvailInput").value.trim() || HERO_DEFAULTS.heroAvailText,
+            heroHeadline: document.getElementById("heroHeadlineInput").value.trim() || HERO_DEFAULTS.heroHeadline,
+            heroRoles: document.getElementById("heroRolesInput").value.trim() || HERO_DEFAULTS.heroRoles,
+            heroLead: document.getElementById("heroLeadInput").value.trim() || HERO_DEFAULTS.heroLead
+          };
+
+          saveHeroConfigToStorage(heroData);
+          updateAdminHeroPreview();
+
+          alert("Hero Section updated successfully! Changes are live on the homepage.");
+          if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = "Save Hero Section Updates →";
+          }
+        });
+      }
+
+      const resetHeroBtn = document.getElementById("resetHeroBtn");
+      if (resetHeroBtn) {
+        resetHeroBtn.addEventListener("click", () => {
+          if (confirm("Reset Hero Section settings to defaults?")) {
+            saveHeroConfigToStorage({
+              heroPortraitUrl: HERO_DEFAULTS.heroPortraitUrl,
+              heroExpYears: HERO_DEFAULTS.heroExpYears,
+              heroExpSubtitle: HERO_DEFAULTS.heroExpSubtitle,
+              heroAvailText: HERO_DEFAULTS.heroAvailText,
+              heroHeadline: HERO_DEFAULTS.heroHeadline,
+              heroRoles: HERO_DEFAULTS.heroRoles,
+              heroLead: HERO_DEFAULTS.heroLead
+            });
+            loadHeroConfig();
+            alert("Hero settings reset to defaults.");
+          }
+        });
+      }
+
+      // ----------------------------------------------------------------------
+      // DIRECTOR'S SHOWREEL UPLOAD (CLOUDINARY dxhew9qpk <= 100MB)
+      // ----------------------------------------------------------------------
+      const srDropzone = document.getElementById("showreelVideoDropzone");
+      const srFileInput = document.getElementById("showreelVideoFile");
+      const srFileLabel = document.getElementById("showreelVideoFileLabel");
+      const srProgressWrap = document.getElementById("showreelUploadProgressWrap");
+      const srProgressBar = document.getElementById("showreelUploadProgressBar");
+      const srProgressLabel = document.getElementById("showreelUploadProgressLabel");
+      const srProgressPercent = document.getElementById("showreelUploadProgressPercent");
+
+      const btnBrowseSr = document.getElementById("btnBrowseShowreelFile");
+      if (btnBrowseSr) {
+        btnBrowseSr.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (srFileInput) srFileInput.click();
+        });
+      }
+
+      if (srDropzone && srFileInput) {
+        srDropzone.addEventListener("click", () => srFileInput.click());
+        srDropzone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          srDropzone.style.borderColor = "var(--accent)";
+        });
+        srDropzone.addEventListener("dragleave", () => {
+          srDropzone.style.borderColor = "";
+        });
+        srDropzone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          srDropzone.style.borderColor = "";
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleShowreelVideoUpload(e.dataTransfer.files[0]);
+          }
+        });
+        srFileInput.addEventListener("change", (e) => {
+          if (e.target.files && e.target.files[0]) {
+            handleShowreelVideoUpload(e.target.files[0]);
+          }
+        });
+      }
+
+      async function handleShowreelVideoUpload(file) {
+        if (!file) return;
+        if (file.size > 100 * 1024 * 1024) {
+          const mb = (file.size / (1024 * 1024)).toFixed(1);
+          alert(`File size is ${mb} MB! Exceeds the strict 100 MB Cloudinary limit. Please choose a video under 100 MB.`);
+          return;
+        }
+
+        srFileLabel.textContent = `Selected: ${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
+        srProgressWrap.style.display = "block";
+        srProgressBar.style.width = "5%";
+        srProgressPercent.textContent = "5%";
+        srProgressLabel.textContent = "Connecting to Cloudinary (dxhew9qpk)...";
+
+        // Show instant preview in admin panel
+        try {
+          const blobUrl = URL.createObjectURL(file);
+          const localPlayer = document.getElementById("showreelLocalVideoPreview");
+          const localWrap = document.getElementById("showreelLocalVideoWrap");
+          if (localPlayer && localWrap) {
+            localPlayer.src = blobUrl;
+            localWrap.style.display = "block";
+          }
+        } catch (e) {}
+
+        try {
+          // Upload directly to Cloudinary (dxhew9qpk)
+          const res = await window.uploadToCloudinary(file, "video", (pct) => {
+            srProgressBar.style.width = pct + "%";
+            srProgressPercent.textContent = pct + "%";
+            srProgressLabel.textContent = `Uploading to Cloudinary (dxhew9qpk)... ${pct}%`;
+          });
+
+          const cloudUrl = res.url || res.secure_url;
+          document.getElementById("showreelVideoUrl").value = cloudUrl;
+
+          // If Cloudinary generated an automatic poster frame and user hasn't set custom cover, use it
+          if (res.posterUrl && (!document.getElementById("showreelCoverUrl").value || document.getElementById("showreelCoverUrl").value === "assets/images/showreel-cover.jpg")) {
+            document.getElementById("showreelCoverUrl").value = res.posterUrl;
+          }
+
+          srProgressBar.style.width = "100%";
+          srProgressPercent.textContent = "100%";
+          srProgressLabel.textContent = "Cloudinary upload complete! (dxhew9qpk)";
+
+          // Update local preview player
+          const localPlayer = document.getElementById("showreelLocalVideoPreview");
+          if (localPlayer) {
+            localPlayer.src = cloudUrl;
+          }
+
+          // Persist to hero config
+          saveHeroConfigToStorage({
+            showreelVideoUrl: cloudUrl,
+            showreelCoverUrl: document.getElementById("showreelCoverUrl").value.trim()
+          });
+          updateAdminShowreelPreview();
+
+          alert(`Showreel video successfully uploaded to Cloudinary!\n\nSecure URL:\n${cloudUrl}\n\n(Live on Homepage Director's Showcase)`);
+        } catch (err) {
+          console.error("Cloudinary showreel upload failed:", err);
+          srProgressLabel.textContent = "Upload notice: " + err.message;
+          alert("Cloudinary upload notice: " + err.message);
+        }
+      }
+
+      // Showreel Cover file upload (Cloudinary / Image)
+      const srCoverFileInput = document.getElementById("showreelCoverFile");
+      if (srCoverFileInput) {
+        srCoverFileInput.addEventListener("change", async (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            try {
+              if (typeof window.uploadToCloudinary === "function") {
+                const imgRes = await window.uploadToCloudinary(file, "image");
+                if (imgRes && imgRes.url) {
+                  document.getElementById("showreelCoverUrl").value = imgRes.url;
+                  updateAdminShowreelPreview();
+                  return;
+                }
+              }
+            } catch (err) {
+              console.warn("Cloudinary cover upload fallback:", err);
+            }
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+              document.getElementById("showreelCoverUrl").value = evt.target.result;
+              updateAdminShowreelPreview();
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Test Showreel Play Button
+      const testPlayBtn = document.getElementById("testShowreelPlayBtn");
+      const previewPlayBtn = document.getElementById("adminPreviewPlayBtn");
+      const triggerTestPlay = () => {
+        const url = document.getElementById("showreelVideoUrl").value.trim() || "assets/images/showreel.mp4";
+        const title = document.getElementById("showreelTitlePillInput").value.trim() || "2026 Director's Showreel";
+        const sub = document.getElementById("showreelHeadlineInput").value.trim() || "Craft, Rhythm & Quiet Emotion";
+        const cover = document.getElementById("showreelCoverUrl").value.trim() || "assets/images/showreel-cover.jpg";
+
+        if (typeof window.openShowreelModal === "function") {
+          window.openShowreelModal(title, sub, cover, url);
+        } else {
+          window.open(url, "_blank");
+        }
+      };
+
+      if (testPlayBtn) testPlayBtn.addEventListener("click", triggerTestPlay);
+      if (previewPlayBtn) previewPlayBtn.addEventListener("click", triggerTestPlay);
+
+      // Showreel Form Submission
+      const showreelConfigForm = document.getElementById("showreelConfigForm");
+      if (showreelConfigForm) {
+        showreelConfigForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const saveBtn = document.getElementById("saveShowreelBtn");
+          if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.textContent = "Saving...";
+          }
+
+          const showreelData = {
+            showreelVideoUrl: document.getElementById("showreelVideoUrl").value.trim() || HERO_DEFAULTS.showreelVideoUrl,
+            showreelCoverUrl: document.getElementById("showreelCoverUrl").value.trim() || HERO_DEFAULTS.showreelCoverUrl,
+            showreelTitlePill: document.getElementById("showreelTitlePillInput").value.trim() || HERO_DEFAULTS.showreelTitlePill,
+            showreelDurationPill: document.getElementById("showreelDurationPillInput").value.trim() || HERO_DEFAULTS.showreelDurationPill,
+            showreelHeadline: document.getElementById("showreelHeadlineInput").value.trim() || HERO_DEFAULTS.showreelHeadline,
+            showreelSubtext: document.getElementById("showreelSubtextInput").value.trim() || HERO_DEFAULTS.showreelSubtext
+          };
+
+          saveHeroConfigToStorage(showreelData);
+          updateAdminShowreelPreview();
+
+          alert("Director's Showreel updated successfully! Changes are live on the homepage.");
+          if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = "Save Showreel Updates →";
+          }
+        });
+      }
+
+      const resetShowreelBtn = document.getElementById("resetShowreelBtn");
+      if (resetShowreelBtn) {
+        resetShowreelBtn.addEventListener("click", () => {
+          if (confirm("Reset Director's Showreel settings to defaults?")) {
+            saveHeroConfigToStorage({
+              showreelVideoUrl: HERO_DEFAULTS.showreelVideoUrl,
+              showreelCoverUrl: HERO_DEFAULTS.showreelCoverUrl,
+              showreelTitlePill: HERO_DEFAULTS.showreelTitlePill,
+              showreelDurationPill: HERO_DEFAULTS.showreelDurationPill,
+              showreelHeadline: HERO_DEFAULTS.showreelHeadline,
+              showreelSubtext: HERO_DEFAULTS.showreelSubtext
+            });
+            loadShowreelConfig();
+            alert("Showreel settings reset to defaults.");
+          }
+        });
+      }
+
+      // Initialize configs
+      loadHeroConfig();
+      loadShowreelConfig();
+
+      // Check URL hash for direct tab access
+      if (window.location.hash === "#hero") {
+        const heroTabBtn = document.getElementById("tabHeroBtn");
+        if (heroTabBtn) heroTabBtn.click();
+      } else if (window.location.hash === "#showreel") {
+        const showreelTabBtn = document.getElementById("tabShowreelBtn");
+        if (showreelTabBtn) showreelTabBtn.click();
+      }
+
+      // Supabase Project Deleter
+      async function deleteProjectFromSupabase(projectId) {
+        if (typeof window.deleteProjectFromSupabase === "function") {
+          return await window.deleteProjectFromSupabase(projectId);
+        }
+        const env = window.__ENV__ || {};
+        const key = document.getElementById("envSupabaseAnonKey")?.value?.trim() || env.SUPABASE?.anonKey;
+        if (!window.supabase || !env.SUPABASE?.url || !key) {
+          return { supabaseSuccess: false, supabaseMessage: "Supabase not configured." };
+        }
+        try {
+          const client = window.supabase.createClient(env.SUPABASE.url, key);
+          const { error } = await client.from("projects").delete().eq("id", projectId);
+          if (error) return { supabaseSuccess: false, supabaseMessage: error.message };
+          return { supabaseSuccess: true, supabaseMessage: "Deleted from Supabase!" };
+        } catch (err) {
+          return { supabaseSuccess: false, supabaseMessage: err.message };
+        }
+      }
+
+      // Tab 3: Render Project Inventory
+      function renderProjectList() {
+        const mount = document.getElementById("adminProjectList");
+        if (!mount || !window.PORTFOLIO_DATA) return;
+
+        const allProjects = window.PORTFOLIO_DATA.projects;
+        mount.innerHTML = allProjects
+          .map(
+            (p) => `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px; border-radius:16px; background:var(--surface); border:1px solid var(--border-soft); box-shadow:var(--shadow-xs); flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:16px;">
+              ${p.image && !p.image.includes("proj-solstice.jpg") ? `<img src="${p.image}" alt="${p.title}" style="width:60px; height:60px; border-radius:12px; object-fit:cover;" />` : `<div style="width:60px; height:60px; border-radius:12px; background:var(--surface-muted); display:grid; place-items:center; font-size:1.4rem;">🎬</div>`}
+              <div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <strong style="font-size:1rem;">${p.title}</strong>
+                  ${p.isCustom ? `<span class="tag tag--storytelling" style="font-size:0.7rem;">Custom Upload</span>` : `<span class="tag" style="font-size:0.7rem;">Sample</span>`}
+                  ${p.featured ? `<span class="tag tag--video-editing" style="font-size:0.7rem;">9:16 Featured</span>` : ""}
+                </div>
+                <div class="muted" style="font-size:0.84rem; margin-top:2px;">
+                  ${p.categoryLabel} · ${p.client} · ${p.duration}
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:10px;">
+              <a href="project.html?id=${p.id}" target="_blank" class="btn btn--ghost btn--sm">View</a>
+              ${
+                p.isCustom || String(p.id).startsWith("custom-") || p.isSupabase
+                  ? `<button class="btn btn--ghost btn--sm" data-delete-id="${p.id}" style="color:#C81E1E; border-color:rgba(200,30,30,0.3);">Delete</button>`
+                  : ""
+              }
+            </div>
+          </div>`
+          )
+          .join("");
+
+        mount.querySelectorAll("[data-delete-id]").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const id = btn.dataset.deleteId;
+            if (confirm(`Are you sure you want to permanently delete this video?\n\nThis will remove it from both your local portfolio and the Supabase database table (id: "${id}").`)) {
+              btn.disabled = true;
+              btn.textContent = "Deleting...";
+
+              // 1. Remove from local storage custom projects
+              const updated = window.getCustomProjects().filter((p) => p.id !== id);
+              window.saveCustomProjects(updated);
+
+              // 2. Delete row from Supabase database table `public.projects`
+              let supaMsg = "";
+              try {
+                const res = await deleteProjectFromSupabase(id);
+                if (res && res.supabaseSuccess) {
+                  supaMsg = "\n✓ Successfully deleted from Supabase `public.projects` table!";
+                } else if (res && res.supabaseMessage) {
+                  supaMsg = `\n(Supabase response: ${res.supabaseMessage})`;
+                }
+              } catch (e) {
+                supaMsg = `\n(Supabase notice: ${e.message})`;
+              }
+
+              // 3. Update in-memory PORTFOLIO_DATA so live homepage updates immediately
+              if (window.PORTFOLIO_DATA && Array.isArray(window.PORTFOLIO_DATA.projects)) {
+                window.PORTFOLIO_DATA.projects = window.PORTFOLIO_DATA.projects.filter((p) => p.id !== id);
+              }
+
+              // 4. Re-render admin list and frontend grids
+              renderProjectList();
+              if (typeof window.refreshPortfolioGrids === "function") {
+                window.refreshPortfolioGrids();
+              }
+
+              alert(`Video deleted from portfolio.${supaMsg}`);
+            }
+          });
+        });
+      }
+
+      // Export JSON backup
+      const exportBtn = document.getElementById("exportBackupBtn");
+      if (exportBtn) {
+        exportBtn.addEventListener("click", () => {
+          const list = window.getCustomProjects();
+          const blob = new Blob([JSON.stringify(list, null, 2)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `gourav-mewara-portfolio-backup-${Date.now()}.json`;
+          a.click();
+        });
+      }
+
+      // Clear all custom uploads
+      const clearBtn = document.getElementById("resetCustomProjectsBtn");
+      if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+          if (confirm("Are you sure you want to clear all custom uploaded reels?")) {
+            localStorage.removeItem("gourav_custom_projects");
+            window.location.reload();
+          }
+        });
+      }
+
+      // Tab 4: Environment settings
+      function loadEnvSettings() {
+        const env = window.__ENV__ || {};
+        const keyInput = document.getElementById("envSupabaseAnonKey");
+        const presetInput = document.getElementById("envCloudinaryPreset");
+        if (keyInput && env.SUPABASE && env.SUPABASE.anonKey && env.SUPABASE.anonKey !== "your-anon-key") {
+          keyInput.value = env.SUPABASE.anonKey;
+        }
+        if (presetInput && env.CLOUDINARY && env.CLOUDINARY.uploadPreset) {
+          presetInput.value = env.CLOUDINARY.uploadPreset;
+        }
+      }
+
+      const envForm = document.getElementById("envSettingsForm");
+      if (envForm) {
+        envForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const anonKey = document.getElementById("envSupabaseAnonKey").value.trim();
+          const preset = document.getElementById("envCloudinaryPreset").value.trim();
+
+          const overrides = {
+            SUPABASE: { anonKey: anonKey || "your-anon-key" },
+            CLOUDINARY: { uploadPreset: preset || "cinestroke_reels" }
+          };
+
+          if (window.updateEnvOverrides && window.updateEnvOverrides(overrides)) {
+            alert("Cloud settings saved successfully!");
+            window.location.reload();
+          }
+        });
+      }
+
+      // Test Supabase Button
+      const testSupabaseBtn = document.getElementById("testSupabaseBtn");
+      if (testSupabaseBtn) {
+        testSupabaseBtn.addEventListener("click", async () => {
+          if (typeof window.supabase === "undefined") {
+            alert("Supabase SDK is loading or unavailable.");
+            return;
+          }
+          const env = window.__ENV__ || {};
+          const key = document.getElementById("envSupabaseAnonKey").value.trim() || (env.SUPABASE && env.SUPABASE.anonKey);
+          if (!key || key === "your-anon-key") {
+            alert("Please paste your real NEXT_PUBLIC_SUPABASE_ANON_KEY above first.");
+            return;
+          }
+          testSupabaseBtn.disabled = true;
+          testSupabaseBtn.textContent = "Connecting...";
+          try {
+            const client = window.supabase.createClient(env.SUPABASE.url, key);
+            const { data, error } = await client.from("projects").select("count", { count: "exact", head: true });
+            if (error) {
+              alert(`Supabase Response: ${error.message}\n\nTip: Make sure you ran the SQL query below to create the 'projects' table!`);
+            } else {
+              alert("Supabase Connected Successfully! Live database sync is active.");
+            }
+          } catch (err) {
+            alert(`Connection test error: ${err.message}`);
+          } finally {
+            testSupabaseBtn.disabled = false;
+            testSupabaseBtn.textContent = "Test Supabase Connection";
+          }
+        });
+      }
+
+      // Sync all local projects to Supabase
+      const syncAllBtn = document.getElementById("syncAllToSupabaseBtn");
+      if (syncAllBtn) {
+        syncAllBtn.addEventListener("click", async () => {
+          syncAllBtn.disabled = true;
+          syncAllBtn.textContent = "Syncing to Supabase...";
+          try {
+            const res = await window.syncAllToSupabase();
+            alert(res.message);
+          } catch (err) {
+            alert("Sync error: " + err.message);
+          } finally {
+            syncAllBtn.disabled = false;
+            syncAllBtn.textContent = "Sync All Local Projects to Supabase";
+          }
+        });
+      }
+
+      // Fetch latest projects from Supabase
+      const pullBtn = document.getElementById("pullFromSupabaseBtn");
+      if (pullBtn) {
+        pullBtn.addEventListener("click", async () => {
+          pullBtn.disabled = true;
+          pullBtn.textContent = "Fetching from Supabase...";
+          try {
+            const list = await window.fetchSupabaseProjects();
+            alert(`Fetched ${list.length} projects from Supabase database!`);
+            renderProjectList();
+          } catch (err) {
+            alert("Fetch error: " + err.message);
+          } finally {
+            pullBtn.disabled = false;
+            pullBtn.textContent = "Fetch Latest from Supabase";
+          }
+        });
+      }
+
+      // Copy SQL
+      const copySqlBtn = document.getElementById("copySqlBtn");
+      if (copySqlBtn) {
+        copySqlBtn.addEventListener("click", () => {
+          const sql = `-- 1. Create projects table
+CREATE TABLE IF NOT EXISTS public.projects (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  category_label TEXT,
+  client_name TEXT,
+  year TEXT DEFAULT '2026',
+  duration TEXT,
+  summary TEXT,
+  video_url TEXT,
+  aspect_ratio TEXT DEFAULT '9:16',
+  image_url TEXT,
+  featured BOOLEAN DEFAULT true,
+  tools TEXT,
+  author_email TEXT DEFAULT 'gourav.mewara4242@gmail.com',
+  created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now())
+);
+
+-- 2. Enable Row Level Security & Policies
+ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read" ON public.projects;
+CREATE POLICY "Allow public read" ON public.projects FOR SELECT TO public USING (true);
+
+DROP POLICY IF EXISTS "Allow insert" ON public.projects;
+CREATE POLICY "Allow insert" ON public.projects FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow update" ON public.projects;
+CREATE POLICY "Allow update" ON public.projects FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow delete" ON public.projects;
+CREATE POLICY "Allow delete" ON public.projects FOR DELETE TO anon, authenticated USING (true);
+
+-- 3. Create Storage bucket 'reels'
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('reels', 'reels', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+DROP POLICY IF EXISTS "Allow public read reels" ON storage.objects;
+CREATE POLICY "Allow public read reels" ON storage.objects FOR SELECT TO public USING (bucket_id = 'reels');
+
+DROP POLICY IF EXISTS "Allow upload reels" ON storage.objects;
+CREATE POLICY "Allow upload reels" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id = 'reels');`;
+          navigator.clipboard.writeText(sql).then(() => {
+            alert("SQL copied to clipboard! Paste it into Supabase SQL Editor.");
+          }).catch(() => {
+            alert("Please copy the SQL text manually from the code box.");
+          });
+        });
+      }
+
+      // Copy Delete SQL
+      const copyDelSqlBtn = document.getElementById("copyDeleteSqlBtn");
+      if (copyDelSqlBtn) {
+        copyDelSqlBtn.addEventListener("click", () => {
+          const sql = `-- 1. Ensure Supabase allows DELETE from the Admin panel:
+ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow delete" ON public.projects;
+CREATE POLICY "Allow delete" 
+  ON public.projects 
+  FOR DELETE 
+  TO anon, authenticated 
+  USING (true);
+
+-- 2. Delete a specific video by its ID:
+DELETE FROM public.projects WHERE id = 'YOUR_PROJECT_ID_HERE';
+
+-- 3. Delete all custom uploaded videos:
+DELETE FROM public.projects WHERE id LIKE 'custom-%';
+
+-- 4. Delete all rows from projects table:
+DELETE FROM public.projects;`;
+          navigator.clipboard.writeText(sql).then(() => {
+            alert("Delete SQL queries copied to clipboard!");
+          }).catch(() => {
+            alert("Please copy the SQL text manually from the code box.");
+          });
+        });
+      }
+
+      updateView();
+    });
+  </script>
+</body>
+</html>

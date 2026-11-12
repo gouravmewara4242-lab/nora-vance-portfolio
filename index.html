@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gourav Mewara &mdash; Video Editor &amp; Creative Storyteller</title>
+  <meta name="description" content="Minimal, editorial portfolio of Gourav Mewara &mdash; Freelance Video Editor, Scriptwriter, Motion Designer, and Creative Storyteller in India." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..500&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+    <!-- 1. Centralized Environment Configuration -->
+  <script src="js/env.js"></script>
+
+  <!-- 2. Firebase SDK Modules (cinestroke-design) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- 3. Supabase SDK Module (cigphrvgzalovxyvyvah) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="js/data.js"></script>
+  <script defer src="js/admin.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body data-page="home">
+  <div id="site-header-mount"></div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Creative Portfolio &middot; India &middot; 2026</span>
+          <h1 class="display-xl hero__title">
+            I turn ideas into <em>stories</em> that move people.
+          </h1>
+          <p class="hero__roles">Video Editor &bull; Scriptwriter &bull; Graphic Designer &bull; Storyteller</p>
+          <p class="lead" style="max-width: 540px; margin: 0 0 32px;">
+            I partner with design-led brands, founders, and creators to shape raw footage and quiet concepts into high-retention 9:16 reels and films audiences actually remember.
+          </p>
+          <div class="hero__actions">
+            <a href="work.html" class="btn btn--primary btn--lg">
+              View My Work
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="contact.html" class="btn btn--secondary btn--lg">
+              Let&rsquo;s Talk &rarr;
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="float-shape float-shape--lavender" aria-hidden="true"></div>
+          <div class="float-shape float-shape--butter" aria-hidden="true"></div>
+          <div class="float-shape float-shape--mint" aria-hidden="true"></div>
+
+          <!-- Hero Arch with Gourav Mewara's Portrait (IMG_0433.jpg) -->
+          <div class="hero-arch">
+            <img id="heroPortraitImg" src="assests/IMG_0433.jpg" onerror="this.src='assets/images/IMG_0433.jpg'" alt="Portrait of Gourav Mewara, Freelance Video Editor and Storyteller" />
+          </div>
+
+          <div class="reel-mini-badge" id="heroExpBadge">
+            <span class="reel-mini-badge__icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+            </span>
+            <div>
+              <div id="heroExpYears" style="font-weight:700; line-height:1.1;">1.5+ Years</div>
+              <div id="heroExpSubtitle" class="muted" style="font-size:0.74rem;">60+ Reels &amp; Films Cut</div>
+            </div>
+          </div>
+
+          <div class="availability-badge" id="heroAvailBadge">
+            <span class="availability-dot" aria-hidden="true"></span>
+            <span id="heroAvailText">Available for freelance &middot; India (IST)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOWREEL -->
+    <section class="section section--compact">
+      <div class="container">
+        <div class="showreel-card reveal" style="position:relative;">
+          <a href="admin.html#showreel" id="heroAdminEditBtn" class="btn btn--secondary btn--sm" style="position:absolute; top:16px; right:16px; z-index:20; display:none; background:rgba(255,255,255,0.92); backdrop-filter:blur(8px); box-shadow:var(--shadow-card);">
+            Edit Showreel &rarr;
+          </a>
+          <div class="showreel-stage" id="homeShowreelTrigger" role="button" tabindex="0" aria-label="Play 2026 Showreel" data-cursor="Play">
+            <img id="showreelCoverImg" src="assets/images/showreel-cover.jpg" alt="Gourav Mewara 2026 Showreel cover frame" />
+            <div class="showreel-overlay">
+              <div class="showreel-top">
+                <span class="showreel-pill" id="showreelTitlePill">2026 Director's Showreel &middot; Gourav Mewara</span>
+                <span class="showreel-pill" id="showreelDurationPill">01:30 &middot; 4K Master</span>
+              </div>
+              <button class="showreel-play-center" aria-label="Play Showreel">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+              </button>
+              <div class="showreel-bottom">
+                <div>
+                  <h3 id="showreelHeadline">Craft, Rhythm &amp; Quiet Emotion</h3>
+                  <p id="showreelSubtext">Selected highlights from Indian D2C brand films, 9:16 vertical reels, and documentaries.</p>
+                </div>
+                <span class="showreel-pill">Click to Watch</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT I DO (6 CATEGORY CARDS) -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-header__copy">
+            <span class="eyebrow">What I Do</span>
+            <h2 class="display-lg">Six creative disciplines, one calm workflow.</h2>
+            <p>Each craft has its own color signature and dedicated portfolio room&mdash;explore the exact discipline your project needs.</p>
+          </div>
+          <a href="services.html" class="btn btn--ghost">Services &amp; Pricing (&#8377;)</a>
+        </div>
+
+        <div class="services-grid" id="homeServicesGrid"></div>
+      </div>
+    </section>
+
+    <!-- FEATURED WORK: FIXED SIZE 9:16 REELS GRID (Requirement 3) -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-header__copy">
+            <span class="eyebrow">Featured Work &middot; Fixed 9:16 Reels</span>
+            <h2 class="display-lg">Selected 9:16 vertical reels &amp; films.</h2>
+            <p>Designed in fixed 9:16 ratio for reels and shorts. <strong>Click any reel card to play or upload your own video / paste a video link.</strong></p>
+          </div>
+          <a href="work.html" class="btn btn--secondary">View All Work</a>
+        </div>
+
+        <div class="featured-reel-grid" id="homeFeaturedGrid"></div>
+      </div>
+    </section>
+
+    <!-- STATS STRIP (INDIAN METRICS) -->
+    <section class="section section--compact">
+      <div class="container">
+        <div class="stats-strip reveal" id="homeStatsStrip"></div>
+      </div>
+    </section>
+
+    <!-- PROCESS TIMELINE -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-header__copy">
+            <span class="eyebrow">How We Work</span>
+            <h2 class="display-lg">From first brief to final master.</h2>
+            <p>A clear, predictable four-step rhythm on WhatsApp so clients always know what happens next.</p>
+          </div>
+        </div>
+
+        <div class="process-timeline" id="homeProcessTimeline"></div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA BANNER (WHATSAPP FOCUS) -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-banner reveal">
+          <div class="cta-banner__inner">
+            <span class="eyebrow">Start a Collaboration</span>
+            <h2 class="display-lg">Have a project in mind?</h2>
+            <p>Whether you have hours of raw footage waiting for a 9:16 reel or just a blank page and an idea, let&rsquo;s talk directly on WhatsApp.</p>
+            <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
+              <a href="https://wa.me/918905564811?text=Hi%20Gourav,%20I'm%20ready%20to%20start%20a%20video%20project!" target="_blank" rel="noopener noreferrer" class="btn btn--whatsapp btn--lg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.455 5.711 1.456h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.414z"/></svg>
+                Chat on WhatsApp (+91 89055 64811)
+              </a>
+              <a href="services.html" class="btn btn--ghost btn--lg">See Pricing in &#8377;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer-mount"></div>
+</body>
+</html>
+

@@ -1,0 +1,16 @@
+# System & Editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Logs & Temp
+*.log
+tmp/
+temp/
+scratch/
+
+# Environments
+.env.local
+.env.*.local
